@@ -1,36 +1,47 @@
 package com.pruebas.usuarios.controller;
 
-import com.pruebas.usuarios.user.User;
+import com.pruebas.usuarios.service.interfaces.IUserService;
+import com.pruebas.usuarios.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private List<User> users = new ArrayList<>();
 
-    @GetMapping
+    @Autowired
+    IUserService userService;
+
+    // SRP - Single Responsibility Principle
+    // Cada método tiene una única responsabilidad relacionada con la gestión de usuarios a través de la API.
+
+    @GetMapping("/all")
     public List<User> getUsers() {
-        return users;
+        return userService.getAllUsers();
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public String createUser(@RequestBody User user) {
-        users.add(user);
-        sendWelcomeEmail(user);
-        saveToDatabase(user);
+        userService.createUser(user);
         return "Usuario creado: " + user;
     }
 
-    private void sendWelcomeEmail(User user) {
-        // Simulación de envío de email
-        System.out.println("Enviando email de bienvenida a " + user.getEmail());
+    @GetMapping("/{id}")
+    public User getUser(@PathVariable String id) {
+        return userService.getUser(id);
     }
 
-    private void saveToDatabase(User user) {
-        // Simulación de guardado en base de datos
-        System.out.println("Guardando usuario en la base de datos: " + user.getName());
+    @PutMapping("/update")
+    public String updateUser(@RequestBody User user) {
+        userService.updateUser(user);
+        return "Usuario actualizado: " + user;
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public String deleteUser(@PathVariable String id) {
+        userService.deleteUser(id);
+        return "Usuario eliminado: " + id;
     }
 }
