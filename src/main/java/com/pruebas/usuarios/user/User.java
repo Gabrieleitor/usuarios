@@ -23,25 +23,8 @@ public class User {
         return type;
     }
 
-    public double calculateSalary() {
-        switch (type) {
-            case EMPLOYEE:
-                return 50000;
-            case MANAGER:
-                return 80000;
-            case EXECUTIVE:
-                return 120000;
-            default:
-                return 0;
-        }
-    }
-
     @Override
     public String toString() {
         return "User{name='" + name + "', email='" + email + "', type='" + type + "'}";
     }
-}
-
-enum UserType {
-    EMPLOYEE, MANAGER, EXECUTIVE
 }
