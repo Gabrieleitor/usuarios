@@ -1,7 +1,7 @@
 package com.pruebas.usuarios.user;
 
 
-public class User {
+public abstract class User {
     private String name;
     private String email;
     private String password;
@@ -19,29 +19,11 @@ public class User {
         return password;
     }
 
-    public UserType getType() {
-        return type;
-    }
+    public abstract UserType getType();
 
-    public double calculateSalary() {
-        switch (type) {
-            case EMPLOYEE:
-                return 50000;
-            case MANAGER:
-                return 80000;
-            case EXECUTIVE:
-                return 120000;
-            default:
-                return 0;
-        }
-    }
+    public abstract double calculateSalary();
 
-    @Override
     public String toString() {
         return "User{name='" + name + "', email='" + email + "', type='" + type + "'}";
     }
-}
-
-enum UserType {
-    EMPLOYEE, MANAGER, EXECUTIVE
 }
