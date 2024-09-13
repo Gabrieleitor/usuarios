@@ -1,13 +1,10 @@
 package com.pruebas.usuarios.service;
 
-import com.pruebas.usuarios.user.User;
+import com.pruebas.usuarios.model.UserType;
+import org.springframework.context.event.EventListener;
 
-public class EmailService {
-    public void sendWelcomeEmail(User user) {
-        System.out.println("Enviando email de bienvenida a " + user.getEmail());
-    }
+public interface EmailService {
 
-    public void sendPromotionEmail(User user) {
-        System.out.println("Enviando email de promoción a " + user.getEmail());
-    }
+    @EventListener
+    void sendWelcomeEmail(UserType userType);
 }

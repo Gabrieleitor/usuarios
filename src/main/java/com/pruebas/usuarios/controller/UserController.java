@@ -1,36 +1,50 @@
 package com.pruebas.usuarios.controller;
 
-import com.pruebas.usuarios.user.User;
+import com.pruebas.usuarios.model.User;
+import com.pruebas.usuarios.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private List<User> users = new ArrayList<>();
+    private final UserService userService;
 
-    @GetMapping
-    public List<User> getUsers() {
-        return users;
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @PostMapping
-    public String createUser(@RequestBody User user) {
-        users.add(user);
-        sendWelcomeEmail(user);
-        saveToDatabase(user);
-        return "Usuario creado: " + user;
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        return ResponseEntity.ok(userService.createUser(user));
     }
 
-    private void sendWelcomeEmail(User user) {
-        // Simulación de envío de email
-        System.out.println("Enviando email de bienvenida a " + user.getEmail());
+    @GetMapping
+    public ResponseEntity<List<User>> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    private void saveToDatabase(User user) {
-        // Simulación de guardado en base de datos
-        System.out.println("Guardando usuario en la base de datos: " + user.getName());
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUser(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.getUser(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
+        return ResponseEntity.ok(userService.updateUser(id, user));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<User>> searchUsers(@RequestParam String name) {
+        return ResponseEntity.ok(userService.searchUsers(name));
     }
 }
